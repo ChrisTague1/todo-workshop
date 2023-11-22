@@ -15,23 +15,23 @@ function App() {
   }, [])
 
   const fetchTodos = async () => {
-    let { data, error } = await supabase
-    .from('todos')
-    .select('*')
+    let { data } = await supabase
+      .from('todos')
+      .select('*')
 
     setTodos(data)
   }
 
   const click = async () => {
-    setValue('')
-    const { data, error } = await supabase
+    await supabase
       .from('todos')
       .insert([
         {todo: value},
       ])
-      .select()
+      .select();
+    setValue('');
 
-      await fetchTodos()
+    await fetchTodos()
   }
 
   const change = (event) => {
@@ -39,28 +39,31 @@ function App() {
   }
 
   const deleteTodo = async (id) => {
-    const { error } = await supabase
-  .from('todos')
-  .delete()
-  .eq('id', id)
+    await supabase
+      .from('todos')
+      .delete()
+      .eq('id', id)
   }
 
   return (
     <>
-    <h1>My Cool Todo App</h1>
-    <div className='card'>
-      <input onChange={change} type='text' value={value}/>
-      <button onClick={click}>
-        My Button
-      </button>
-    </div>
-      
-      {todos.map((todo, index) => (
-        <div className='card'>
+      <h1>A Really Cool Todo App</h1>
+      <div className='card'>
+        <input onChange={change} type='text' value={value}/>
+        <button onClick={click}>
+          Add Todo
+        </button>
+      </div>
+
+      {todos.map((todo) => (
+        <div
+          className='card'
+          key={todo.id}
+        >
           {todo.todo}
           <button onClick={() => deleteTodo(todo.id)}>
             Delete Todo
-            </button>
+          </button>
         </div>
       ))}
     </>
