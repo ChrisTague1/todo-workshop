@@ -19,7 +19,7 @@ function App() {
       .from('todos')
       .select('*')
 
-    setTodos(data)
+    setTodos(data || [])
   }
 
   const click = async () => {
